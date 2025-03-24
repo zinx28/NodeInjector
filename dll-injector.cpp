@@ -23,7 +23,7 @@ Napi::Value InjectDll(const Napi::CallbackInfo &info)
         return env.Undefined();
     }
 
-    // this is required (if the project trying to use it doesnt wait for it before injecting)
+    // this is required (if the project trying to use it doesn't wait for it before injecting)
     if (WaitForInputIdle(hProcess, INFINITE) != 0)
     {
         Napi::Error::New(env, "Failed to wait for input").ThrowAsJavaScriptException();

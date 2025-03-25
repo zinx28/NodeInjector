@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 //h~andle
-
 Napi::Value InjectDll(const Napi::CallbackInfo &info)
 {
     Napi::Env env = info.Env();
@@ -98,7 +97,7 @@ Napi::Value FreezeProcess(const Napi::CallbackInfo &info)
     pNtSuspendProcess NtSuspendProcess = (pNtSuspendProcess)GetProcAddress(hNtDll, "NtSuspendProcess");
     if (!NtSuspendProcess)
     {
-        Napi::Error::New(env, "Failed to get 'NtSuspendProcess' function").ThrowAsJavaScriptException();
+        Napi::Error::New(env, "Failed to get NtSuspendProcess from function proc addr").ThrowAsJavaScriptException();
         return env.Null();
     }
 
@@ -109,8 +108,8 @@ Napi::Value FreezeProcess(const Napi::CallbackInfo &info)
         return env.Null();
     }
 
-    NTSTATUS status = NtSuspendProcess(hProcess);
-    if (status != 0)
+    NTSTATUS Status = NtSuspendProcess(hProcess);
+    if (Status != 0)
     {
         Napi::Error::New(env, "Failed to suspend the process").ThrowAsJavaScriptException();
         CloseHandle(hProcess);
@@ -118,11 +117,12 @@ Napi::Value FreezeProcess(const Napi::CallbackInfo &info)
     }
 
     CloseHandle(hProcess);
-    return Napi::String::New(env, "should be suspsened");
+    return Napi::String::New(env, "Should be suspended");
 }
 
 Napi::Object Init(Napi::Env env, Napi::Object exports)
 {
+    // export functions you need to call from node.js
     exports.Set("injectDll", Napi::Function::New(env, InjectDll));
     exports.Set("freezeProcess", Napi::Function::New(env, FreezeProcess));
     return exports;

@@ -4,7 +4,7 @@
 you need node modules to be installed
 
 # Steps
-1. npm install ~ this installs node_modules
+1. npm install
 2. npm install -g node-gyp
 3. node-gyp configure
 ### Build it! 
